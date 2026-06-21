@@ -1,3 +1,5 @@
+const MAX_RISK = 750;
+
 document.addEventListener('DOMContentLoaded', () => {
     const tradeForm = document.getElementById('tradeForm');
     const emptyState = document.getElementById('emptyState');
@@ -27,8 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const riskPerShare = Math.abs(entry - sl);
         const rewardPerShare = Math.abs(tp - entry);
         
-        const maxRisk = 750; 
-        const suggestedShares = riskPerShare > 0 ? Math.floor(maxRisk / riskPerShare) : 0;
+        const suggestedShares = riskPerShare > 0 ? Math.floor(MAX_RISK / riskPerShare) : 0;
         let rrRatio = riskPerShare > 0 ? (rewardPerShare / riskPerShare).toFixed(1) : 0;
 
         emptyState.classList.add('hidden');
@@ -56,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     else rrValue.className = 'value warning';
 
                     sizeValue.textContent = `${suggestedShares} shares`;
-                    lossValue.textContent = `-$${maxRisk}`;
+                    lossValue.textContent = `-$${MAX_RISK}`;
 
                     processingState.classList.add('hidden');
                     resultsView.classList.remove('hidden');
