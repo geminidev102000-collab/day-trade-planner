@@ -17,28 +17,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const lossValue = document.getElementById('lossValue');
     const sizeValue = document.getElementById('sizeValue');
 
-    tradeForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        
-        const entry = parseFloat(entryInput.value);
-        const sl = parseFloat(stopInput.value);
-        const tp = parseFloat(targetInput.value);
-
+    function calculateRisk(entry, sl, tp) {
         const riskPerShare = Math.abs(entry - sl);
         const rewardPerShare = Math.abs(tp - entry);
         
         const maxRisk = 750; 
         const suggestedShares = riskPerShare > 0 ? Math.floor(maxRisk / riskPerShare) : 0;
-        let rrRatio = riskPerShare > 0 ? (rewardPerShare / riskPerShare).toFixed(1) : 0;
-
-        emptyState.classList.add('hidden');
-        resultsView.classList.add('hidden');
-        processingState.classList.remove('hidden');
+        const rrRatio = riskPerShare > 0 ? (rewardPerShare / riskPerShare).toFixed(1) : 0;
         
-        submitBtn.disabled = true;
-        btnText.textContent = 'Processing Data...';
-        btnSpinner.classList.remove('hidden');
+        return { maxRisk, suggestedShares, rrRatio };
+    }
 
+    function simulateProgress(onComplete) {
         let progress = 0;
         const interval = setInterval(() => {
             progress += Math.random() * 20;
@@ -48,26 +38,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (progress === 100) {
                 clearInterval(interval);
-                
-                setTimeout(() => {
-                    rrValue.textContent = `1 : ${rrRatio}`;
-                    if (rrRatio >= 3) rrValue.className = 'value excellent';
-                    else if (rrRatio >= 2) rrValue.className = 'value';
-                    else rrValue.className = 'value warning';
-
-                    sizeValue.textContent = `${suggestedShares} shares`;
-                    lossValue.textContent = `-$${maxRisk}`;
-
-                    processingState.classList.add('hidden');
-                    resultsView.classList.remove('hidden');
-                    
-                    submitBtn.disabled = false;
-                    btnText.textContent = 'Analyze Trade';
-                    btnSpinner.classList.add('hidden');
-                    progressFill.style.width = '0%';
-                }, 500);
+                setTimeout(onComplete, 500);
             }
         }, 350);
+    }
+
+    function updateUIWithResults(rrRatio, suggestedShares, maxRisk) {
+        rrValue.textContent = `1 : ${rrRatio}`;
+        if (rrRatio >= 3) rrValue.className = 'value excellent';
+        else if (rrRatio >= 2) rrValue.className = 'value';
+        else rrValue.className = 'value warning';
+
+        sizeValue.textContent = `${suggestedShares} shares`;
+        lossValue.textContent = `-$${maxRisk}`;
+
+        processingState.classList.add('hidden');
+        resultsView.classList.remove('hidden');
+
+        submitBtn.disabled = false;
+        btnText.textContent = 'Analyze Trade';
+        btnSpinner.classList.add('hidden');
+        progressFill.style.width = '0%';
+    }
+
+    tradeForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const entry = parseFloat(entryInput.value);
+        const sl = parseFloat(stopInput.value);
+        const tp = parseFloat(targetInput.value);
+
+        const { maxRisk, suggestedShares, rrRatio } = calculateRisk(entry, sl, tp);
+
+        emptyState.classList.add('hidden');
+        resultsView.classList.add('hidden');
+        processingState.classList.remove('hidden');
+
+        submitBtn.disabled = true;
+        btnText.textContent = 'Processing Data...';
+        btnSpinner.classList.remove('hidden');
+
+        simulateProgress(() => {
+            updateUIWithResults(rrRatio, suggestedShares, maxRisk);
+        });
     });
 
     document.getElementById('btnLogTrade').addEventListener('click', () => {
