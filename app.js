@@ -81,11 +81,15 @@ document.addEventListener('DOMContentLoaded', () => {
         entryInput.focus();
     });
     
-    const navItems = document.querySelectorAll('.nav-item');
-    navItems.forEach(item => {
-        item.addEventListener('click', () => {
-            navItems.forEach(n => n.classList.remove('active'));
-            item.classList.add('active');
+    const navMenu = document.querySelector('.nav-menu');
+    if (navMenu) {
+        navMenu.addEventListener('click', (e) => {
+            const item = e.target.closest('.nav-item');
+            if (item) {
+                const navItems = document.querySelectorAll('.nav-item');
+                navItems.forEach(n => n.classList.remove('active'));
+                item.classList.add('active');
+            }
         });
-    });
+    }
 });
