@@ -47,8 +47,10 @@
                 </div>
             </header>
 
-            <!-- Workspace: Input -> Processing -> Output -->
-            <div class="workspace-grid">
+            <!-- View Container -->
+            <div id="dashboard-view" class="view-section active">
+                <!-- Workspace: Input -> Processing -> Output -->
+                <div class="workspace-grid">
                 
                 <!-- Left Column: Input Form -->
                 <section class="panel input-panel">
@@ -170,7 +172,23 @@
                         </div>
                     </div>
                 </section>
+                </div>
             </div>
+
+            <!-- Journal View -->
+            <div id="journal-view" class="view-section hidden">
+                <div class="panel" style="margin: 24px;">
+                    <h3>Trade Journal</h3>
+                    <p class="panel-desc">Review your logged trades.</p>
+                    <div id="journalEntries" class="journal-entries-container">
+                        <!-- Journal entries will be injected here -->
+                        <div class="empty-state">
+                            <p class="text-sm text-dim">No trades logged yet.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </main>
     </div>
     <script src="app.js"></script>
