@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const strategy = strategyInput.value;
         const mood = document.querySelector('input[name="mood"]:checked').value;
 
+        if (isNaN(entry) || isNaN(sl) || isNaN(tp) || entry <= 0 || sl <= 0 || tp <= 0) {
+            alert('Please enter valid positive numbers for all price fields.');
+            return;
+        }
+
         const riskPerShare = Math.abs(entry - sl);
         const rewardPerShare = Math.abs(tp - entry);
         
