@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
         item.addEventListener('click', () => {
-            navItems.forEach(n => n.classList.remove('active'));
+            document.querySelector('.nav-item.active')?.classList.remove('active');
             item.classList.add('active');
         });
     });
