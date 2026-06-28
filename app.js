@@ -71,25 +71,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     let strategyText = strategy.replace('_', ' ');
 
-                    advisementText.innerHTML = ''; // Clear previous content
-
-                    const p1 = document.createTextNode('This setup aligns with a ');
-                    const strong = document.createElement('strong');
-                    strong.textContent = strategyText;
-                    const p2 = document.createTextNode(' strategy. ');
-
-                    advisementText.appendChild(p1);
-                    advisementText.appendChild(strong);
-                    advisementText.appendChild(p2);
-
-                    const moodText = document.createTextNode(mood);
+                    advisementText.innerHTML = `This setup aligns with a <strong>${strategyText}</strong> strategy. `;
 
                     if (mood === 'fomo' || mood === 'anxious') {
-                        const p3 = document.createTextNode("However, your psychological state registers as '");
-                        const p4 = document.createTextNode("'. It is highly recommended to reduce position size or step away. ");
-                        advisementText.appendChild(p3);
-                        advisementText.appendChild(moodText);
-                        advisementText.appendChild(p4);
+                        advisementText.innerHTML += `However, your psychological state registers as '${mood}'. It is highly recommended to reduce position size or step away. `;
 
                         alertDiv.className = 'alert warning';
                         alertDiv.style.backgroundColor = 'rgba(255, 42, 85, 0.1)';
@@ -97,11 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         alertDiv.style.color = 'var(--red-alert)';
                         alertDiv.innerHTML = `<span class="alert-icon">⚠️</span><strong>Caution:</strong> Sub-optimal psychology detected.`;
                     } else if (rrRatio < 2) {
-                        const p3 = document.createTextNode("Your state is '");
-                        const p4 = document.createTextNode(`', but the Risk/Reward ratio (${rrRatio}) is below the recommended 1:2 minimum. `);
-                        advisementText.appendChild(p3);
-                        advisementText.appendChild(moodText);
-                        advisementText.appendChild(p4);
+                        advisementText.innerHTML += `Your state is '${mood}', but the Risk/Reward ratio (${rrRatio}) is below the recommended 1:2 minimum. `;
 
                         alertDiv.className = 'alert warning';
                         alertDiv.style.backgroundColor = 'rgba(255, 42, 85, 0.1)';
@@ -109,11 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         alertDiv.style.color = 'var(--red-alert)';
                         alertDiv.innerHTML = `<span class="alert-icon">⚠️</span><strong>Caution:</strong> Poor Risk/Reward ratio.`;
                     } else {
-                        const p3 = document.createTextNode("Your psychological state registers as '");
-                        const p4 = document.createTextNode("', which correlates with high-probability execution. ");
-                        advisementText.appendChild(p3);
-                        advisementText.appendChild(moodText);
-                        advisementText.appendChild(p4);
+                        advisementText.innerHTML += `Your psychological state registers as '${mood}', which correlates with high-probability execution. `;
 
                         alertDiv.className = 'alert success';
                         alertDiv.style.backgroundColor = 'rgba(163, 255, 0, 0.1)';
