@@ -233,8 +233,7 @@ document.addEventListener('DOMContentLoaded', () => {
         item.addEventListener('click', () => {
             const target = item.getAttribute('data-target');
 
-            // Only switch views if the target is 'dashboard' or 'journal' for now
-            if (target === 'dashboard' || target === 'journal') {
+            if (['dashboard', 'journal', 'watchlist', 'performance'].includes(target)) {
                 navItems.forEach(n => n.classList.remove('active'));
                 item.classList.add('active');
 
@@ -248,6 +247,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const headerTitle = document.querySelector('.top-header h2');
                 if (target === 'dashboard') headerTitle.textContent = 'Plan & Execute';
                 if (target === 'journal') headerTitle.textContent = 'Trade Journal';
+                if (target === 'watchlist') headerTitle.textContent = 'Prep Checklist';
+                if (target === 'performance') headerTitle.textContent = 'Performance';
             } else {
                 alert(`${target.charAt(0).toUpperCase() + target.slice(1)} view is under construction.`);
             }
