@@ -142,7 +142,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function loadJournalEntries() {
         const entriesContainer = document.getElementById('journalEntries');
-        const trades = JSON.parse(localStorage.getItem('tradeJournal') || '[]');
+        let trades;
+        try {
+            trades = JSON.parse(localStorage.getItem('tradeJournal') || '[]');
+        } catch (e) {
+            console.error('Failed to parse tradeJournal from localStorage, defaulting to empty array.', e);
+            trades = [];
+        }
 
         if (trades.length === 0) {
             entriesContainer.innerHTML = `
@@ -206,7 +212,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('btnLogTrade').addEventListener('click', () => {
         if (currentTradeData) {
-            const trades = JSON.parse(localStorage.getItem('tradeJournal') || '[]');
+            let trades;
+            try {
+                trades = JSON.parse(localStorage.getItem('tradeJournal') || '[]');
+            } catch (e) {
+                console.error('Failed to parse tradeJournal from localStorage, defaulting to empty array.', e);
+                trades = [];
+            }
             trades.unshift(currentTradeData);
             localStorage.setItem('tradeJournal', JSON.stringify(trades));
 
