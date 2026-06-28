@@ -155,6 +155,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         entriesContainer.innerHTML = ''; // Clear previous contents
 
+        const fragment = document.createDocumentFragment();
+
         trades.forEach(trade => {
             const entryDiv = document.createElement('div');
             entryDiv.className = 'journal-entry';
@@ -200,8 +202,10 @@ document.addEventListener('DOMContentLoaded', () => {
             entryDiv.appendChild(detailsDiv);
             entryDiv.appendChild(metricsDiv);
 
-            entriesContainer.appendChild(entryDiv);
+            fragment.appendChild(entryDiv);
         });
+
+        entriesContainer.appendChild(fragment);
     }
 
     document.getElementById('btnLogTrade').addEventListener('click', () => {
