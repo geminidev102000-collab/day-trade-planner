@@ -18,6 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const rrValue = document.getElementById('rrValue');
     const lossValue = document.getElementById('lossValue');
     const sizeValue = document.getElementById('sizeValue');
+    const advisementText = document.querySelector('.advisement-text');
+    const alertDiv = document.querySelector('.alert');
 
     let currentTradeData = null;
 
@@ -66,9 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     lossValue.textContent = `-$${maxRisk}`;
 
                     // Dynamic Advisement Logic
-                    const advisementText = document.querySelector('.advisement-text');
-                    const alertDiv = document.querySelector('.alert');
-
                     let strategyText = strategy.replace('_', ' ');
 
                     advisementText.innerHTML = ''; // Clear previous content
