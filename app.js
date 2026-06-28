@@ -95,7 +95,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         alertDiv.style.backgroundColor = 'rgba(255, 42, 85, 0.1)';
                         alertDiv.style.borderColor = 'rgba(255, 42, 85, 0.2)';
                         alertDiv.style.color = 'var(--red-alert)';
-                        alertDiv.innerHTML = `<span class="alert-icon">⚠️</span><strong>Caution:</strong> Sub-optimal psychology detected.`;
+                        alertDiv.textContent = '';
+                        const span1 = document.createElement('span');
+                        span1.className = 'alert-icon';
+                        span1.textContent = '⚠️';
+                        const strong1 = document.createElement('strong');
+                        strong1.textContent = 'Caution:';
+                        const text1 = document.createTextNode(' Sub-optimal psychology detected.');
+                        alertDiv.appendChild(span1);
+                        alertDiv.appendChild(strong1);
+                        alertDiv.appendChild(text1);
                     } else if (rrRatio < 2) {
                         const p3 = document.createTextNode("Your state is '");
                         const p4 = document.createTextNode(`', but the Risk/Reward ratio (${rrRatio}) is below the recommended 1:2 minimum. `);
@@ -107,7 +116,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         alertDiv.style.backgroundColor = 'rgba(255, 42, 85, 0.1)';
                         alertDiv.style.borderColor = 'rgba(255, 42, 85, 0.2)';
                         alertDiv.style.color = 'var(--red-alert)';
-                        alertDiv.innerHTML = `<span class="alert-icon">⚠️</span><strong>Caution:</strong> Poor Risk/Reward ratio.`;
+                        alertDiv.textContent = '';
+                        const span2 = document.createElement('span');
+                        span2.className = 'alert-icon';
+                        span2.textContent = '⚠️';
+                        const strong2 = document.createElement('strong');
+                        strong2.textContent = 'Caution:';
+                        const text2 = document.createTextNode(' Poor Risk/Reward ratio.');
+                        alertDiv.appendChild(span2);
+                        alertDiv.appendChild(strong2);
+                        alertDiv.appendChild(text2);
                     } else {
                         const p3 = document.createTextNode("Your psychological state registers as '");
                         const p4 = document.createTextNode("', which correlates with high-probability execution. ");
@@ -119,7 +137,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         alertDiv.style.backgroundColor = 'rgba(163, 255, 0, 0.1)';
                         alertDiv.style.borderColor = 'rgba(163, 255, 0, 0.2)';
                         alertDiv.style.color = 'var(--lime-green)';
-                        alertDiv.innerHTML = `<span class="alert-icon">✓</span><strong>Clear to execute:</strong> Setup and psychology are aligned.`;
+                        alertDiv.textContent = '';
+                        const span3 = document.createElement('span');
+                        span3.className = 'alert-icon';
+                        span3.textContent = '✓';
+                        const strong3 = document.createElement('strong');
+                        strong3.textContent = 'Clear to execute:';
+                        const text3 = document.createTextNode(' Setup and psychology are aligned.');
+                        alertDiv.appendChild(span3);
+                        alertDiv.appendChild(strong3);
+                        alertDiv.appendChild(text3);
                     }
 
                     currentTradeData = {
