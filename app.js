@@ -21,7 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentTradeData = null;
 
-    tradeForm.addEventListener('submit', (e) => {
+    const delay = ms => new Promise(res => setTimeout(res, ms));
+
+    tradeForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const ticker = tickerInput.value.toUpperCase();
@@ -47,97 +49,94 @@ document.addEventListener('DOMContentLoaded', () => {
         btnSpinner.classList.remove('hidden');
 
         let progress = 0;
-        const interval = setInterval(() => {
+
+        while (progress < 100) {
+            await delay(350);
             progress += Math.random() * 20;
             if (progress >= 100) progress = 100;
-            
             progressFill.style.width = `${progress}%`;
+        }
 
-            if (progress === 100) {
-                clearInterval(interval);
-                
-                setTimeout(() => {
-                    rrValue.textContent = `1 : ${rrRatio}`;
-                    if (rrRatio >= 3) rrValue.className = 'value excellent';
-                    else if (rrRatio >= 2) rrValue.className = 'value';
-                    else rrValue.className = 'value warning';
+        await delay(500);
 
-                    sizeValue.textContent = `${suggestedShares} shares`;
-                    lossValue.textContent = `-$${maxRisk}`;
+        rrValue.textContent = `1 : ${rrRatio}`;
+        if (rrRatio >= 3) rrValue.className = 'value excellent';
+        else if (rrRatio >= 2) rrValue.className = 'value';
+        else rrValue.className = 'value warning';
 
-                    // Dynamic Advisement Logic
-                    const advisementText = document.querySelector('.advisement-text');
-                    const alertDiv = document.querySelector('.alert');
+        sizeValue.textContent = `${suggestedShares} shares`;
+        lossValue.textContent = `-$${maxRisk}`;
 
-                    let strategyText = strategy.replace('_', ' ');
+        // Dynamic Advisement Logic
+        const advisementText = document.querySelector('.advisement-text');
+        const alertDiv = document.querySelector('.alert');
 
-                    advisementText.innerHTML = ''; // Clear previous content
+        let strategyText = strategy.replace('_', ' ');
 
-                    const p1 = document.createTextNode('This setup aligns with a ');
-                    const strong = document.createElement('strong');
-                    strong.textContent = strategyText;
-                    const p2 = document.createTextNode(' strategy. ');
+        advisementText.innerHTML = ''; // Clear previous content
 
-                    advisementText.appendChild(p1);
-                    advisementText.appendChild(strong);
-                    advisementText.appendChild(p2);
+        const p1 = document.createTextNode('This setup aligns with a ');
+        const strong = document.createElement('strong');
+        strong.textContent = strategyText;
+        const p2 = document.createTextNode(' strategy. ');
 
-                    const moodText = document.createTextNode(mood);
+        advisementText.appendChild(p1);
+        advisementText.appendChild(strong);
+        advisementText.appendChild(p2);
 
-                    if (mood === 'fomo' || mood === 'anxious') {
-                        const p3 = document.createTextNode("However, your psychological state registers as '");
-                        const p4 = document.createTextNode("'. It is highly recommended to reduce position size or step away. ");
-                        advisementText.appendChild(p3);
-                        advisementText.appendChild(moodText);
-                        advisementText.appendChild(p4);
+        const moodText = document.createTextNode(mood);
 
-                        alertDiv.className = 'alert warning';
-                        alertDiv.style.backgroundColor = 'rgba(255, 42, 85, 0.1)';
-                        alertDiv.style.borderColor = 'rgba(255, 42, 85, 0.2)';
-                        alertDiv.style.color = 'var(--red-alert)';
-                        alertDiv.innerHTML = `<span class="alert-icon">⚠️</span><strong>Caution:</strong> Sub-optimal psychology detected.`;
-                    } else if (rrRatio < 2) {
-                        const p3 = document.createTextNode("Your state is '");
-                        const p4 = document.createTextNode(`', but the Risk/Reward ratio (${rrRatio}) is below the recommended 1:2 minimum. `);
-                        advisementText.appendChild(p3);
-                        advisementText.appendChild(moodText);
-                        advisementText.appendChild(p4);
+        if (mood === 'fomo' || mood === 'anxious') {
+            const p3 = document.createTextNode("However, your psychological state registers as '");
+            const p4 = document.createTextNode("'. It is highly recommended to reduce position size or step away. ");
+            advisementText.appendChild(p3);
+            advisementText.appendChild(moodText);
+            advisementText.appendChild(p4);
 
-                        alertDiv.className = 'alert warning';
-                        alertDiv.style.backgroundColor = 'rgba(255, 42, 85, 0.1)';
-                        alertDiv.style.borderColor = 'rgba(255, 42, 85, 0.2)';
-                        alertDiv.style.color = 'var(--red-alert)';
-                        alertDiv.innerHTML = `<span class="alert-icon">⚠️</span><strong>Caution:</strong> Poor Risk/Reward ratio.`;
-                    } else {
-                        const p3 = document.createTextNode("Your psychological state registers as '");
-                        const p4 = document.createTextNode("', which correlates with high-probability execution. ");
-                        advisementText.appendChild(p3);
-                        advisementText.appendChild(moodText);
-                        advisementText.appendChild(p4);
+            alertDiv.className = 'alert warning';
+            alertDiv.style.backgroundColor = 'rgba(255, 42, 85, 0.1)';
+            alertDiv.style.borderColor = 'rgba(255, 42, 85, 0.2)';
+            alertDiv.style.color = 'var(--red-alert)';
+            alertDiv.innerHTML = `<span class="alert-icon">⚠️</span><strong>Caution:</strong> Sub-optimal psychology detected.`;
+        } else if (rrRatio < 2) {
+            const p3 = document.createTextNode("Your state is '");
+            const p4 = document.createTextNode(`', but the Risk/Reward ratio (${rrRatio}) is below the recommended 1:2 minimum. `);
+            advisementText.appendChild(p3);
+            advisementText.appendChild(moodText);
+            advisementText.appendChild(p4);
 
-                        alertDiv.className = 'alert success';
-                        alertDiv.style.backgroundColor = 'rgba(163, 255, 0, 0.1)';
-                        alertDiv.style.borderColor = 'rgba(163, 255, 0, 0.2)';
-                        alertDiv.style.color = 'var(--lime-green)';
-                        alertDiv.innerHTML = `<span class="alert-icon">✓</span><strong>Clear to execute:</strong> Setup and psychology are aligned.`;
-                    }
+            alertDiv.className = 'alert warning';
+            alertDiv.style.backgroundColor = 'rgba(255, 42, 85, 0.1)';
+            alertDiv.style.borderColor = 'rgba(255, 42, 85, 0.2)';
+            alertDiv.style.color = 'var(--red-alert)';
+            alertDiv.innerHTML = `<span class="alert-icon">⚠️</span><strong>Caution:</strong> Poor Risk/Reward ratio.`;
+        } else {
+            const p3 = document.createTextNode("Your psychological state registers as '");
+            const p4 = document.createTextNode("', which correlates with high-probability execution. ");
+            advisementText.appendChild(p3);
+            advisementText.appendChild(moodText);
+            advisementText.appendChild(p4);
 
-                    currentTradeData = {
-                        id: Date.now(),
-                        date: new Date().toLocaleString(),
-                        ticker, entry, sl, tp, strategy, mood, rrRatio, suggestedShares, maxRisk
-                    };
+            alertDiv.className = 'alert success';
+            alertDiv.style.backgroundColor = 'rgba(163, 255, 0, 0.1)';
+            alertDiv.style.borderColor = 'rgba(163, 255, 0, 0.2)';
+            alertDiv.style.color = 'var(--lime-green)';
+            alertDiv.innerHTML = `<span class="alert-icon">✓</span><strong>Clear to execute:</strong> Setup and psychology are aligned.`;
+        }
 
-                    processingState.classList.add('hidden');
-                    resultsView.classList.remove('hidden');
-                    
-                    submitBtn.disabled = false;
-                    btnText.textContent = 'Analyze Trade';
-                    btnSpinner.classList.add('hidden');
-                    progressFill.style.width = '0%';
-                }, 500);
-            }
-        }, 350);
+        currentTradeData = {
+            id: Date.now(),
+            date: new Date().toLocaleString(),
+            ticker, entry, sl, tp, strategy, mood, rrRatio, suggestedShares, maxRisk
+        };
+
+        processingState.classList.add('hidden');
+        resultsView.classList.remove('hidden');
+
+        submitBtn.disabled = false;
+        btnText.textContent = 'Analyze Trade';
+        btnSpinner.classList.add('hidden');
+        progressFill.style.width = '0%';
     });
 
     function loadJournalEntries() {
