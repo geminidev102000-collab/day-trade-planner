@@ -153,55 +153,29 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        entriesContainer.innerHTML = ''; // Clear previous contents
+        const escapeHTML = (str) => {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        };
 
-        trades.forEach(trade => {
-            const entryDiv = document.createElement('div');
-            entryDiv.className = 'journal-entry';
-
-            const detailsDiv = document.createElement('div');
-            detailsDiv.className = 'journal-entry-details';
-
-            const tickerSpan = document.createElement('span');
-            tickerSpan.className = 'journal-entry-ticker';
-            tickerSpan.textContent = trade.ticker + ' ';
-
-            const strategySpan = document.createElement('span');
-            strategySpan.style.fontSize = '0.8rem';
-            strategySpan.style.fontWeight = 'normal';
-            strategySpan.style.color = 'var(--text-dim)';
-            strategySpan.textContent = `(${trade.strategy.replace('_', ' ')})`;
-            tickerSpan.appendChild(strategySpan);
-
-            const infoSpan = document.createElement('span');
-            infoSpan.className = 'journal-entry-info';
-            infoSpan.textContent = `${trade.date} | Entry: $${trade.entry} | SL: $${trade.sl} | TP: $${trade.tp}`;
-
-            detailsDiv.appendChild(tickerSpan);
-            detailsDiv.appendChild(infoSpan);
-
-            const metricsDiv = document.createElement('div');
-            metricsDiv.className = 'journal-entry-metrics';
-            metricsDiv.style.textAlign = 'right';
-
-            const rrDiv = document.createElement('div');
-            rrDiv.style.fontWeight = 'bold';
-            rrDiv.style.color = trade.rrRatio >= 2 ? 'var(--lime-green)' : 'var(--red-alert)';
-            rrDiv.textContent = `R:R 1:${trade.rrRatio}`;
-
-            const moodDiv = document.createElement('div');
-            moodDiv.style.fontSize = '0.85rem';
-            moodDiv.style.color = 'var(--text-dim)';
-            moodDiv.textContent = `Mood: ${trade.mood}`;
-
-            metricsDiv.appendChild(rrDiv);
-            metricsDiv.appendChild(moodDiv);
-
-            entryDiv.appendChild(detailsDiv);
-            entryDiv.appendChild(metricsDiv);
-
-            entriesContainer.appendChild(entryDiv);
-        });
+        entriesContainer.innerHTML = trades.map(trade => {
+            const rrColor = trade.rrRatio >= 2 ? 'var(--lime-green)' : 'var(--red-alert)';
+            return `
+                <div class="journal-entry">
+                    <div class="journal-entry-details">
+                        <span class="journal-entry-ticker">${escapeHTML(trade.ticker)} <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-dim);">(${escapeHTML(trade.strategy.replace('_', ' '))})</span></span>
+                        <span class="journal-entry-info">${escapeHTML(trade.date)} | Entry: $${escapeHTML(trade.entry)} | SL: $${escapeHTML(trade.sl)} | TP: $${escapeHTML(trade.tp)}</span>
+                    </div>
+                    <div class="journal-entry-metrics" style="text-align: right;">
+                        <div style="font-weight: bold; color: ${rrColor};">R:R 1:${escapeHTML(trade.rrRatio)}</div>
+                        <div style="font-size: 0.85rem; color: var(--text-dim);">Mood: ${escapeHTML(trade.mood)}</div>
+                    </div>
+                </div>`;
+        }).join('');
     }
 
     document.getElementById('btnLogTrade').addEventListener('click', () => {
