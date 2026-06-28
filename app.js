@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     let strategyText = strategy.replace('_', ' ');
 
-                    advisementText.innerHTML = ''; // Clear previous content
+                    advisementText.textContent = ''; // Clear previous content
 
                     const p1 = document.createTextNode('This setup aligns with a ');
                     const strong = document.createElement('strong');
@@ -95,7 +95,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         alertDiv.style.backgroundColor = 'rgba(255, 42, 85, 0.1)';
                         alertDiv.style.borderColor = 'rgba(255, 42, 85, 0.2)';
                         alertDiv.style.color = 'var(--red-alert)';
-                        alertDiv.innerHTML = `<span class="alert-icon">⚠️</span><strong>Caution:</strong> Sub-optimal psychology detected.`;
+                        alertDiv.textContent = '';
+                        const iconSpan = document.createElement('span');
+                        iconSpan.className = 'alert-icon';
+                        iconSpan.textContent = '⚠️';
+                        const strongText = document.createElement('strong');
+                        strongText.textContent = 'Caution:';
+                        alertDiv.appendChild(iconSpan);
+                        alertDiv.appendChild(strongText);
+                        alertDiv.appendChild(document.createTextNode(' Sub-optimal psychology detected.'));
                     } else if (rrRatio < 2) {
                         const p3 = document.createTextNode("Your state is '");
                         const p4 = document.createTextNode(`', but the Risk/Reward ratio (${rrRatio}) is below the recommended 1:2 minimum. `);
@@ -107,7 +115,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         alertDiv.style.backgroundColor = 'rgba(255, 42, 85, 0.1)';
                         alertDiv.style.borderColor = 'rgba(255, 42, 85, 0.2)';
                         alertDiv.style.color = 'var(--red-alert)';
-                        alertDiv.innerHTML = `<span class="alert-icon">⚠️</span><strong>Caution:</strong> Poor Risk/Reward ratio.`;
+                        alertDiv.textContent = '';
+                        const iconSpan2 = document.createElement('span');
+                        iconSpan2.className = 'alert-icon';
+                        iconSpan2.textContent = '⚠️';
+                        const strongText2 = document.createElement('strong');
+                        strongText2.textContent = 'Caution:';
+                        alertDiv.appendChild(iconSpan2);
+                        alertDiv.appendChild(strongText2);
+                        alertDiv.appendChild(document.createTextNode(' Poor Risk/Reward ratio.'));
                     } else {
                         const p3 = document.createTextNode("Your psychological state registers as '");
                         const p4 = document.createTextNode("', which correlates with high-probability execution. ");
@@ -119,7 +135,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         alertDiv.style.backgroundColor = 'rgba(163, 255, 0, 0.1)';
                         alertDiv.style.borderColor = 'rgba(163, 255, 0, 0.2)';
                         alertDiv.style.color = 'var(--lime-green)';
-                        alertDiv.innerHTML = `<span class="alert-icon">✓</span><strong>Clear to execute:</strong> Setup and psychology are aligned.`;
+                        alertDiv.textContent = '';
+                        const iconSpan3 = document.createElement('span');
+                        iconSpan3.className = 'alert-icon';
+                        iconSpan3.textContent = '✓';
+                        const strongText3 = document.createElement('strong');
+                        strongText3.textContent = 'Clear to execute:';
+                        alertDiv.appendChild(iconSpan3);
+                        alertDiv.appendChild(strongText3);
+                        alertDiv.appendChild(document.createTextNode(' Setup and psychology are aligned.'));
                     }
 
                     currentTradeData = {
@@ -145,15 +169,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const trades = JSON.parse(localStorage.getItem('tradeJournal') || '[]');
 
         if (trades.length === 0) {
-            entriesContainer.innerHTML = `
-                <div class="empty-state">
-                    <p class="text-sm text-dim">No trades logged yet.</p>
-                </div>
-            `;
+            entriesContainer.textContent = '';
+            const emptyStateDiv = document.createElement('div');
+            emptyStateDiv.className = 'empty-state';
+            const emptyStateP = document.createElement('p');
+            emptyStateP.className = 'text-sm text-dim';
+            emptyStateP.textContent = 'No trades logged yet.';
+            emptyStateDiv.appendChild(emptyStateP);
+            entriesContainer.appendChild(emptyStateDiv);
             return;
         }
 
-        entriesContainer.innerHTML = ''; // Clear previous contents
+        entriesContainer.textContent = ''; // Clear previous contents
 
         trades.forEach(trade => {
             const entryDiv = document.createElement('div');
